@@ -15,6 +15,7 @@ public class AlertRabbit {
         try (BufferedReader in =  new BufferedReader(new FileReader("src/main/resources/rabbit.properties"))) {
             Properties config = new Properties();
             config.load(in);
+            in.close();
 
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
