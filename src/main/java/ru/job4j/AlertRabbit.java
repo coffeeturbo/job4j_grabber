@@ -17,30 +17,44 @@ public class AlertRabbit {
             config.load(in);
             in.close();
 
+            Connect connect = new Connect(config);
             Scheduler scheduler = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
-            JobDetail job = newJob(Rabbit.class).build();
-
+            JobDataMap data = new JobDataMap();
+            data.put("connect", connect);
+            JobDetail job = newJob(Rabbit.class)
+                .usingJobData(data)
+                .build();
             SimpleScheduleBuilder times = simpleSchedule()
                 .withIntervalInSeconds(Integer.parseInt(config.getProperty("rabbit.interval")))
                 .repeatForever();
-
             Trigger trigger = newTrigger()
                 .startNow()
                 .withSchedule(times)
                 .build();
-
             scheduler.scheduleJob(job, trigger);
+            Thread.sleep(10000);
+            scheduler.shutdown();
 
-        } catch (SchedulerException | IOException se) {
+            connect.close();
+        } catch (Exception se) {
             se.printStackTrace();
         }
     }
 
     public static class Rabbit implements Job {
+
+        public Rabbit() {
+            System.out.println(hashCode());
+        }
+
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
             System.out.println("Rabbit runs here ...");
+            JobDetail job = context.getJobDetail();
+
+            Connect connect = (Connect) job.getJobDataMap().get("connect");
+            connect.insert(System.currentTimeMillis());
         }
     }
 }
