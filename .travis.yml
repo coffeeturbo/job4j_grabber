@@ -18,12 +18,12 @@ after_success:
 notifications:
   email:
     recipients:
-#      -at@yandex.ru
+      null
     on_success: never # default: change
-    on_failure: always # default: al,ways
+    on_failure: never # default: al,ways
 
-#services:
-#  - postgresql
+services:
+  - postgresql
 
-#before_install:
-#  - psql -c 'create database job4j;' -U postgres
+before_install:
+  - psql -c 'create database grabber;' -U postgres
