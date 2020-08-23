@@ -25,19 +25,19 @@
                 <activeByDefault>true</activeByDefault>
             </activation>
             <properties>
-                <db.url>jdbc:postgresql://localhost/grabber</db.url>
-                <db.username>postgres</db.username>
-                <db.password></db.password>
-                <db.driver>org.postgresql.Driver</db.driver>
+                <url>jdbc:postgresql://localhost/grabber</url>
+                <username>postgres</username>
+                <password></password>
+                <driver>org.postgresql.Driver</driver>
             </properties>
         </profile>
         <profile>
             <id>test</id>
             <properties>
-                <db.url>jdbc:postgresql://127.0.0.1:5432/grabber</db.url>
-                <db.username>postgres</db.username>
-                <db.password>1234</db.password>
-                <db.driver>org.postgresql.Driver</db.driver>
+                <url>jdbc:postgresql://127.0.0.1:5432/grabber</url>
+                <username>postgres</username>
+                <password>1234</password>
+                <driver>org.postgresql.Driver</driver>
             </properties>
         </profile>
         <profile>
