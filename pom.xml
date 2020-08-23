@@ -43,10 +43,10 @@
         <profile>
             <id>production</id>
             <properties>
-                <jdbc.url>jdbc:postgresql://localhost:5432/grabber</jdbc.url>
-                <jdbc.username>postgres</jdbc.username>
-                <jdbc.password>1234</jdbc.password>
-                <jdbc.driver>org.postgresql.Driver</jdbc.driver>
+                <url>jdbc:postgresql://localhost:5432/grabber</url>
+                <username>postgres</username>
+                <password>1234</password>
+                <driver>org.postgresql.Driver</driver>
             </properties>
         </profile>
     </profiles>

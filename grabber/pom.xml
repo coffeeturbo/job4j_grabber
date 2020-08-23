@@ -19,10 +19,10 @@
                 <version>3.6.2</version>
                 <configuration>
                     <changeLogFile>${basedir}/db/master.xml</changeLogFile>
-                    <url>${jdbc.url}</url>
-                    <driver>${jdbc.driver}</driver>
-                    <username>${jdbc.username}</username>
-                    <password>${jdbc.password}</password>
+                    <url>${url}</url>
+                    <driver>${driver}</driver>
+                    <username>${username}</username>
+                    <password>${password}</password>
                 </configuration>
                 <executions>
                     <execution>
