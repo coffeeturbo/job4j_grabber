@@ -15,8 +15,14 @@ public class SqlRuParse {
 
 
     public static void main(String[] args) throws Exception {
-        Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers").get();
-        Elements trs = doc.select(".forumTable tr");
+        Elements trs = new Elements();
+
+        for (int i = 1; i < 6; i++) {
+            Document doc = Jsoup.connect("https://www.sql.ru/forum/job-offers/" + i).get();
+            Elements elems = doc.select(".forumTable tr");
+            trs.addAll(elems);
+        }
+
         for (Element row : trs) {
 
             System.out.println(row.child(LINK_TD).text());
@@ -46,8 +52,6 @@ public class SqlRuParse {
             } catch (ParseException e) {
             }
         }
-
-
 
         return parsedDate;
     }
