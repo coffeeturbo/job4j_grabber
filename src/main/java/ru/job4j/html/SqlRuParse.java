@@ -36,15 +36,28 @@ public class SqlRuParse {
 
     }
 
-    private static Date parseDate(String date) {
+    public static Date parseDate(String date) {
         Date parsedDate = null;
         String[] splitDate = date.split(" ");
 
         if (splitDate.length > 1) {
-            splitDate[1] = splitDate[1].concat(".");
+            if (!splitDate[1].toLowerCase().contains("май")) {
+                splitDate[1] = splitDate[1].concat(".");
+            }
+
+            SimpleDateFormat format = new SimpleDateFormat("dd LLL yy,", Locale.getDefault());
+            Calendar cal = Calendar.getInstance();
+
+            if (date.toLowerCase().contains("сегодня")) {
+                splitDate[0] = format.format(cal.getTime());
+            }
+
+            if (date.toLowerCase().contains("вчера")) {
+                cal.add(Calendar.DATE, -1);
+                splitDate[0] = format.format(cal.getTime());
+            }
 
             String concat = String.join(" ", splitDate);
-
             SimpleDateFormat formatter = new SimpleDateFormat("dd LLL yy, HH:mm", Locale.getDefault());
 
             try {
