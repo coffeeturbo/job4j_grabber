@@ -1,4 +1,6 @@
-import model.Post;
+package grabber;
+
+import grabber.model.Post;
 
 import java.util.List;
 
