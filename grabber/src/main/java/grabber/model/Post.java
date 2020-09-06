@@ -20,6 +20,9 @@ public class Post {
             + createdAt + '}';
     }
 
+    public Post() {
+    }
+
     public Post(String name, String text, String link, Date createdAt) {
         this.name = name;
         this.text = text;
