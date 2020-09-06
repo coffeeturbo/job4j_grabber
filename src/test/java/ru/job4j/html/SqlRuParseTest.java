@@ -12,6 +12,14 @@ import static org.hamcrest.Matchers.is;
 public class SqlRuParseTest {
 
     @Test
+    public void whenParseDateWithStringMonthShort2() {
+        String inputDate = "4 сен 20, 17:14";
+        Date actualDate = SqlRuParse.parseDate(inputDate);
+        String expectedDate = "Fri Sep 04 17:14:00 MSK 2020";
+
+        assertThat(actualDate.toString(), is(expectedDate));
+    }
+    @Test
     public void whenParseDateWithStringMonthShort() {
         String inputDate = "22 авг 20, 07:44";
         Date actualDate = SqlRuParse.parseDate(inputDate);

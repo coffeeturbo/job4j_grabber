@@ -41,6 +41,10 @@ public class SqlRuParse {
         String[] splitDate = date.split(" ");
 
         if (splitDate.length > 1) {
+            if (splitDate[1].toLowerCase().contains("сен")) {
+                splitDate[1] = splitDate[1].concat("т");
+            }
+
             if (!splitDate[1].toLowerCase().contains("май")) {
                 splitDate[1] = splitDate[1].concat(".");
             }
