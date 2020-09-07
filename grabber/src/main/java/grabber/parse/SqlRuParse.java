@@ -1,4 +1,4 @@
-package grabber.command;
+package grabber.parse;
 
 
 import grabber.Parse;
