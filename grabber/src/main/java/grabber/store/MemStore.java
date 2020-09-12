@@ -23,4 +23,9 @@ public class MemStore implements Store {
     public List<Post> getAll() {
         return posts;
     }
+
+    @Override
+    public Post findById(String id) {
+        return null;
+    }
 }
