@@ -65,7 +65,8 @@ jrebel.lic
 *.ipr
 *.iws
 .*.sw?
-.idea
+
+docker/.env
 docker/postgres/data
 
 # paulp script
