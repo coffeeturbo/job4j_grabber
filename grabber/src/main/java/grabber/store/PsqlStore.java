@@ -4,12 +4,10 @@ import grabber.Store;
 import grabber.model.Post;
 
 import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.Random;
 
 public class PsqlStore implements Store, AutoCloseable {
 
@@ -35,13 +33,9 @@ public class PsqlStore implements Store, AutoCloseable {
             System.out.println("Outputting All posts");
             store.getAll().forEach(System.out::println);
 
-
-
         } catch (Exception e) {
             throw new IllegalStateException(e);
         }
-
-
     }
 
     public PsqlStore(Properties cfg) {
