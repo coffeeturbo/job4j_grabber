@@ -5,7 +5,7 @@ import grabber.Parse;
 import grabber.Store;
 import grabber.model.Post;
 import grabber.parse.SqlRuParse;
-import grabber.store.PsqlStore;
+import grabber.store.MemStore;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -14,6 +14,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.List;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.newJob;
@@ -24,14 +25,7 @@ public class Grabber implements Grab {
     private final Properties cfg = new Properties();
 
     public Store store() {
-        try (InputStream in = PsqlStore.class.getClassLoader().getResourceAsStream("app.properties")) {
-            Properties config = new Properties();
-            config.load(in);
-            return (new PsqlStore(config));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
+        return new MemStore();
     }
 
     public Scheduler scheduler() throws SchedulerException {
@@ -46,8 +40,6 @@ public class Grabber implements Grab {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     @Override
@@ -83,7 +75,10 @@ public class Grabber implements Grab {
                 throw new JobExecutionException("store cannot be null");
             }
 
-            parse.list("https://www.sql.ru/forum/job-offers/").forEach(store::save);
+            List<Post> posts = parse.list("https://www.sql.ru/forum/job-offers/");
+            posts.forEach(store::save);
+
+            System.out.println("Добавлено: " + posts.size());
         }
     }
 
@@ -102,9 +97,9 @@ public class Grabber implements Grab {
                 while (!server.isClosed()) {
                     Socket socket = server.accept();
                     try (OutputStream out = socket.getOutputStream()) {
-                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+                        out.write(("HTTP/1.1 200 OK\r\n\r\n").getBytes());
                         for (Post post : store.getAll()) {
-                            out.write(post.toString().getBytes());
+                            out.write(post.toString().getBytes("cp1251"));
                             out.write(System.lineSeparator().getBytes());
                         }
                     } catch (IOException io) {

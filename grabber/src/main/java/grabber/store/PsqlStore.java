@@ -73,7 +73,7 @@ public class PsqlStore implements Store, AutoCloseable {
             post.setId(rsl.getInt(1));
 
         } catch (Exception throwables) {
-            throwables.printStackTrace();
+//            throwables.printStackTrace();
         }
     }
 
