@@ -3,6 +3,7 @@ package grabber.grab;
 import grabber.Grab;
 import grabber.Parse;
 import grabber.Store;
+import grabber.model.Post;
 import grabber.parse.SqlRuParse;
 import grabber.store.PsqlStore;
 import org.quartz.*;
@@ -10,6 +11,9 @@ import org.quartz.impl.StdSchedulerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.Properties;
 
 import static org.quartz.JobBuilder.newJob;
@@ -65,12 +69,19 @@ public class Grabber implements Grab {
     }
 
     public static class GrabJob implements Job {
-
         @Override
         public void execute(JobExecutionContext context) throws JobExecutionException {
             JobDataMap map = context.getJobDetail().getJobDataMap();
             Parse parse = (Parse) map.get("parse");
             Store store = (Store) map.get("store");
+
+            if (parse == null) {
+                throw new JobExecutionException("parse cannot be null");
+            }
+
+            if (store == null) {
+                throw new JobExecutionException("store cannot be null");
+            }
 
             parse.list("https://www.sql.ru/forum/job-offers/").forEach(store::save);
         }
@@ -82,5 +93,28 @@ public class Grabber implements Grab {
         Scheduler scheduler = grab.scheduler();
         Store store = grab.store();
         grab.init(new SqlRuParse(), store, scheduler);
+        grab.web(store);
     }
+
+    public void web(Store store) {
+        new Thread(() -> {
+            try (ServerSocket server = new ServerSocket(Integer.parseInt(cfg.getProperty("port")))) {
+                while (!server.isClosed()) {
+                    Socket socket = server.accept();
+                    try (OutputStream out = socket.getOutputStream()) {
+                        out.write("HTTP/1.1 200 OK\r\n\r\n".getBytes());
+                        for (Post post : store.getAll()) {
+                            out.write(post.toString().getBytes());
+                            out.write(System.lineSeparator().getBytes());
+                        }
+                    } catch (IOException io) {
+                        io.printStackTrace();
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
 }
