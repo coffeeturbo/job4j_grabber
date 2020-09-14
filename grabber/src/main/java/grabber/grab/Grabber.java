@@ -5,7 +5,7 @@ import grabber.Parse;
 import grabber.Store;
 import grabber.model.Post;
 import grabber.parse.SqlRuParse;
-import grabber.store.MemStore;
+import grabber.store.PsqlStore;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 
@@ -25,7 +25,7 @@ public class Grabber implements Grab {
     private final Properties cfg = new Properties();
 
     public Store store() {
-        return new MemStore();
+        return new PsqlStore(cfg);
     }
 
     public Scheduler scheduler() throws SchedulerException {
@@ -100,6 +100,7 @@ public class Grabber implements Grab {
                         out.write(("HTTP/1.1 200 OK\r\n\r\n").getBytes());
                         for (Post post : store.getAll()) {
                             out.write(post.toString().getBytes("cp1251"));
+                            out.write(System.lineSeparator().getBytes());
                             out.write(System.lineSeparator().getBytes());
                         }
                     } catch (IOException io) {
